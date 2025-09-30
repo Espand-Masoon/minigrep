@@ -2,6 +2,7 @@ use std::env;
 use std::fs;
 use std::process;
 use std::io;
+use minigrep::search;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -17,11 +18,12 @@ fn main() {
 }
 
 fn run(config: Config) -> Result<(), io::Error> {
-    println!("We're looking for {}", config.query);
     // Reading the file content
     let file_content = fs::read_to_string(config.file_path)?;
-    println!("In this file: {}", config.file_path);
-    println!("The file content is:\n{file_content}");
+    let result_lines = search(config.query, &file_content);
+    for line in result_lines {
+        println!("{line}");
+    }
     Ok(())
 }
 
